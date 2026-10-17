@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>远程视频康复系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, sans-serif;
+        }
+        body {
+            background:#161b26;
+            color:#fff;
+            padding:16px;
+            max-width:1000px;
+            margin:0 auto;
+        }
+        h1{
+            text-align:center;
+            margin-bottom:20px;
+            color:#4cc9f0;
+            font-size:22px;
+        }
+        .video-wrap{
+            width:100%;
+            background:#000;
+            border-radius:12px;
+            overflow:hidden;
+            margin-bottom:16px;
+        }
+        video{
+            width:100%;
+            display:block;
+            transform: scaleX(-1); /*镜像，照镜子效果，康复训练更方便*/
+        }
+        .btn-group{
+            display:flex;
+            gap:10px;
+            margin-bottom:20px;
+            flex-wrap:wrap;
+        }
+        button{
+            flex:1;
+            min-width:110px;
+            padding:14px 8px;
+            border:none;
+            border-radius:10px;
+            font-size:16px;
+            font-weight:bold;
+        }
+        .btn-on{
+            background:#4361ee;
+            color:white;
+        }
+        .btn-off{
+            background:#f72585;
+            color:white;
+        }
+        .btn-timer{
+            background:#2ec4b6;
+            color:#000;
+        }
+        .card{
+            background:#212b3b;
+            border-radius:12px;
+            padding:18px;
+            margin-bottom:14px;
+        }
+        .card h3{
+            color:#4cc9f0;
+            margin-bottom:10px;
+        }
+        .action-item{
+            padding:10px 0;
+            border-bottom:1px solid #333f54;
+        }
+        .timer-text{
+            font-size:32px;
+            text-align:center;
+            margin:10px 0;
+        }
+        textarea{
+            width:100%;
+            min-height:100px;
+            background:#2c394b;
+            color:#fff;
+            border:1px solid #445570;
+            border-radius:8px;
+            padding:12px;
+            font-size:15px;
+            margin-top:8px;
+        }
+            .lang{display:flex;gap:6px;justify-content:flex-end;margin-bottom:8px}
+        .lang button{flex:none;min-width:0;padding:6px 14px;font-size:14px;background:#2c394b;color:#fff}
+        .lang button.on{background:#4cc9f0;color:#000}
+        #camMsg{display:none;color:#ffd166}
+</style>
+</head>
+<body>
+    <div class="lang" id="lang"></div>
+    <h1 data-k="title"></h1>
+    <div class="video-wrap">
+        <video id="localVideo" autoplay playsinline muted></video>
+    </div>
+    <div class="btn-group">
+        <button class="btn-on" id="openCam" data-k="open"></button>
+        <button class="btn-off" id="closeCam" data-k="close"></button>
+        <button class="btn-timer" id="startTimer"></button>
+    </div>
+    <div class="card" id="camMsg"></div>
+    <div class="card">
+        <h3 data-k="timer"></h3>
+        <div class="timer-text" id="timerDisplay">00:00</div>
+    </div>
+    <div class="card">
+        <h3 data-k="lib"></h3>
+        <div class="action-item" data-k="e1"></div>
+        <div class="action-item" data-k="e2"></div>
+        <div class="action-item" data-k="e3"></div>
+        <div class="action-item" data-k="e4"></div>
+        <div class="action-item" data-k="e5"></div>
+    </div>
+    <div class="card">
+        <h3 data-k="note"></h3>
+        <textarea id="note"></textarea>
+    </div>
+<script>
+const L={
+zh:{title:"📹远程视频康复训练平台",open:"开启摄像头",close:"关闭摄像头",start:"开始训练计时",stop:"停止计时",timer:"⏱训练计时器",lib:"🦾康复动作库(肩部/上肢康复)",
+e1:"1. 肩部外展:缓慢手臂向侧面抬起,不要耸肩,10次一组",e2:"2. 肩关节前屈:手臂向前缓慢上举,感受肩部拉伸,10次",e3:"3. 肩胛骨收缩:双肩向后夹紧,保持5秒,12次",e4:"4. 钟摆运动:身体微微前倾,手臂自然小幅度画圈,放松肩袖",e5:"5. 肘关节屈伸:缓慢弯胳膊伸直,适合术后活动",
+note:"💬AI康复建议记录区",ph:"记录训练感受、疼痛程度、动作问题,模拟远程康复师反馈...",
+ns:"当前浏览器或页面环境不支持摄像头。请把页面链接复制到 Chrome / Safari 中单独打开。",bl:"摄像头被拦截。常见原因:页面嵌在聊天窗口里,浏览器不允许;或你点了“禁止”。请用 Chrome / Safari 单独打开,并在权限提示里选择“允许”。",nf:"没有检测到摄像头设备。",bz:"摄像头正被其他程序占用,请先关闭其他使用摄像头的应用(如视频会议)再试。",ot:"摄像头打开失败:{0}"},
+en:{title:"📹Remote Video Rehab Training Platform",open:"Start camera",close:"Stop camera",start:"Start timer",stop:"Stop timer",timer:"⏱Training timer",lib:"🦾Exercise library (shoulder / upper limb)",
+e1:"1. Shoulder abduction: slowly raise the arm out to the side without shrugging, 10 reps per set",e2:"2. Shoulder forward flexion: slowly raise the arm forward and feel the shoulder stretch, 10 reps",e3:"3. Scapular retraction: squeeze the shoulder blades back and hold 5 s, 12 reps",e4:"4. Pendulum: lean forward slightly and let the arm make small, relaxed circles to loosen the rotator cuff",e5:"5. Elbow flexion/extension: slowly bend and straighten the arm, suitable for post-surgery movement",
+note:"💬AI advice log",ph:"Record how training felt, pain level and movement problems, to simulate remote therapist feedback...",
+ns:"This browser or page environment does not support the camera. Copy the page link into Chrome / Safari and open it on its own.",bl:"Camera blocked. Common causes: the page is embedded in a chat window, or you tapped “Block”. Open it directly in Chrome / Safari and choose “Allow” in the permission prompt.",nf:"No camera device found.",bz:"The camera is in use by another app. Close other apps using it (e.g. video calls) and try again.",ot:"Could not open the camera: {0}"},
+ko:{title:"📹원격 영상 재활 훈련 플랫폼",open:"카메라 켜기",close:"카메라 끄기",start:"훈련 타이머 시작",stop:"타이머 정지",timer:"⏱훈련 타이머",lib:"🦾재활 동작 라이브러리 (어깨/상지)",
+e1:"1. 어깨 외전: 팔을 천천히 옆으로 들어 올리되 어깨를 으쓱하지 않기, 10회 1세트",e2:"2. 어깨 전방 굴곡: 팔을 천천히 앞으로 들어 올리며 어깨 스트레칭 느끼기, 10회",e3:"3. 견갑골 모으기: 양 어깨를 뒤로 모아 5초 유지, 12회",e4:"4. 진자 운동: 몸을 살짝 숙이고 팔에 힘을 빼 작게 원을 그리며 회전근개 이완",e5:"5. 팔꿈치 굴곡·신전: 팔을 천천히 구부렸다 펴기, 수술 후 움직임에 적합",
+note:"💬AI 재활 조언 기록",ph:"훈련 느낌, 통증 정도, 동작 문제를 기록하세요. 원격 재활사 피드백을 가정한 칸입니다...",
+ns:"이 브라우저 또는 페이지 환경에서는 카메라를 지원하지 않습니다. 링크를 Chrome / Safari에 복사해 단독으로 여세요.",bl:"카메라가 차단되었습니다. 흔한 원인: 페이지가 채팅 창 안에 삽입되어 있거나 '차단'을 눌렀을 때입니다. Chrome / Safari에서 직접 열고 권한 창에서 '허용'을 선택하세요.",nf:"카메라 장치를 찾을 수 없습니다.",bz:"다른 앱이 카메라를 사용 중입니다. 화상 회의 등 다른 앱을 닫고 다시 시도하세요.",ot:"카메라를 열 수 없습니다: {0}"}};
+const LN={zh:"中文",en:"EN",ko:"한국어"},$=id=>document.getElementById(id);
+function ldg(){try{return localStorage.getItem("lang")}catch(e){return null}}
+let lang=ldg()||(navigator.language||"en").slice(0,2);if(!L[lang])lang="en";
+const t=(k,x)=>L[lang][k].replace("{0}",x||"");
+let err=null,running=false,mediaStream=null;
+function render(){
+ document.documentElement.lang=lang==="zh"?"zh-CN":lang;document.title=t("title").replace("📹","");
+ document.querySelectorAll("[data-k]").forEach(e=>e.textContent=t(e.dataset.k));
+ $("note").placeholder=t("ph");
+ $("startTimer").textContent=t(running?"stop":"start");
+ const lg=$("lang");lg.innerHTML="";
+ Object.keys(LN).forEach(k=>{const b=document.createElement("button");b.textContent=LN[k];b.className=k===lang?"on":"";b.onclick=()=>{lang=k;try{localStorage.setItem("lang",k)}catch(e){}render()};lg.appendChild(b)});
+ const m=$("camMsg");if(err){m.textContent="⚠️ "+t(err.k,err.x);m.style.display="block"}else m.style.display="none";
+}
+$("openCam").addEventListener("click",async()=>{
+ try{
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){err={k:"ns"};render();return}
+  mediaStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:false});
+  $("localVideo").srcObject=mediaStream;err=null;render();
+ }catch(e){
+  const n=e&&e.name;
+  err=n==="NotAllowedError"||n==="SecurityError"?{k:"bl"}:n==="NotFoundError"?{k:"nf"}:n==="NotReadableError"?{k:"bz"}:{k:"ot",x:(e&&e.message)||e};
+  render();
+ }
+});
+$("closeCam").addEventListener("click",()=>{
+ if(mediaStream){mediaStream.getTracks().forEach(x=>x.stop());$("localVideo").srcObject=null}
+});
+let timer=null,sec=0;
+$("startTimer").addEventListener("click",()=>{
+ if(timer){clearInterval(timer);timer=null;running=false;render();return}
+ running=true;render();
+ timer=setInterval(()=>{sec++;$("timerDisplay").textContent=String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")},1000);
+});
+render();
+</script>
+</body>
+</html>
