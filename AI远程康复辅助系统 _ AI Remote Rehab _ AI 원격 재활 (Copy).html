@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI远程康复辅助系统 / AI Remote Rehab / AI 원격 재활 (Copy)</title>
+<style>
+:root{--bg:#f4f7f6;--card:#fff;--ink:#1d2b36;--sub:#566873;--line:#d9e2e0;--pri:#0f6b8a;--ok:#13795b;--warn:#b45309;--warnbg:#fef3e2;--soft:#e7f1f4;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 120px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.7 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+nav .t{padding:12px 18px 4px;font-weight:700;font-size:20px;color:var(--pri);max-width:760px;margin:0 auto}
+nav .l{display:flex;gap:6px;overflow-x:auto;max-width:760px;margin:0 auto;padding:0 12px 8px}
+nav a{flex:none;padding:8px 14px;border-radius:999px;color:var(--ink);text-decoration:none;font-size:17px}
+nav a:hover,nav a:focus-visible{background:var(--soft);outline:none}
+section{padding:36px 0}
+h2{font-size:26px;margin:0 0 6px}
+.lead{color:var(--sub);margin:0 0 22px}
+.hero{background:var(--pri);color:#fff;padding:44px 0 40px}
+.hero h1{font-size:34px;line-height:1.3;margin:0 0 12px}
+.hero p{margin:0 0 22px;opacity:.92}
+.btn{display:inline-block;border:0;border-radius:14px;padding:15px 24px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;min-height:54px}
+.btn.w{background:#fff;color:var(--pri)}.btn.o{border:2px solid #fff;color:#fff;background:none;margin-left:8px}
+.btn.p{background:var(--pri);color:#fff;width:100%;margin-top:18px}.btn.g{background:var(--ok);color:#fff;width:100%}
+.btn:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+label{display:block;font-weight:700;margin:18px 0 8px}
+select,input[type=text]{width:100%;padding:14px;font:inherit;border:1px solid #b9c7c4;border-radius:12px;background:#fff;color:var(--ink)}
+input[type=range]{width:100%;height:32px;accent-color:var(--pri)}
+.pain{font-size:22px;font-weight:700}
+#plan{margin-top:22px;display:none}
+#plan h3{margin:0 0 8px;font-size:21px}
+#plan ul{margin:6px 0 12px;padding-left:22px}
+.alert{background:var(--warnbg);border-left:6px solid var(--warn);padding:14px 16px;border-radius:10px;margin-bottom:14px;color:#6b3a05;font-weight:600}
+.ex{margin-bottom:14px;padding:0}
+.ex summary{padding:18px 20px;cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.ex summary::-webkit-details-marker{display:none}
+.ex summary small{display:block;font-weight:400;color:var(--sub)}
+.ex summary::after{content:"＋";color:var(--pri);font-size:24px}
+.ex[open] summary::after{content:"－"}
+.ex .b{padding:0 20px 18px;border-top:1px solid var(--line)}
+.ex ol{padding-left:22px;margin:12px 0}
+.dose{color:var(--ok);font-weight:700}
+.log{padding:14px 16px;background:var(--soft);border-radius:12px;margin-top:10px}
+.log b{color:var(--pri)}.empty{color:var(--sub);margin-top:14px}
+#chatBox{height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:12px;padding:14px;background:#fafcfb;margin-bottom:14px}
+.me{color:var(--pri);margin:8px 0}.ai{color:var(--ok);margin:8px 0}
+footer{background:#1d2b36;color:#fff;text-align:center;padding:30px 18px;margin-top:20px}
+footer small{display:block;color:#9fb0ba;margin-top:8px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.lang{display:flex;gap:6px;padding:0 18px 8px;max-width:760px;margin:0 auto}
+.lang button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font:inherit;font-size:16px;cursor:pointer;color:var(--ink)}
+.lang button[aria-pressed=true]{background:var(--pri);color:#fff;border-color:var(--pri)}
+.lang button:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+body{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+:lang(ko) body,body:lang(ko){word-break:keep-all}
+</style>
+</head>
+<body>
+<nav><div class="t" data-i="brand"></div>
+<div class="lang" role="group" aria-label="Language"><button data-l="zh">中文</button><button data-l="en">English</button><button data-l="ko">한국어</button></div>
+<div class="l"><a href="#home" data-i="nHome"></a><a href="#eval" data-i="nEval"></a><a href="#train" data-i="nTrain"></a><a href="#record" data-i="nRec"></a><a href="#chat" data-i="nChat"></a></div></nav>
+
+<header class="hero" id="home"><div class="wrap">
+<h1 data-i="h1"></h1><p data-i="hp"></p>
+<a class="btn w" href="#eval" data-i="start"></a><a class="btn o" href="#train" data-i="view"></a>
+</div></header>
+
+<section id="eval"><div class="wrap">
+<h2 data-i="eH"></h2><p class="lead" data-i="eLead"></p>
+<div class="card">
+<label for="part" data-i="lPart"></label><select id="part"></select>
+<label for="stage" data-i="lStage"></label><select id="stage"></select>
+<label for="pain" data-i="lPain"></label>
+<input type="range" id="pain" min="0" max="10" value="3"><div class="pain" id="painText"></div>
+<label for="swell" data-i="lSwell"></label><select id="swell"></select>
+<button class="btn p" id="gen" data-i="gen"></button>
+</div>
+<div class="card" id="plan"><h3 id="planTitle"></h3><div id="planBody"></div></div>
+</div></section>
+
+<section id="train"><div class="wrap">
+<h2 data-i="tH"></h2><p class="lead" data-i="tLead"></p><div id="exList"></div>
+</div></section>
+
+<section id="record"><div class="wrap">
+<h2 data-i="rH"></h2><p class="lead" data-i="rLead"></p>
+<div class="card">
+<label for="logText" data-i="lLog"></label><input type="text" id="logText">
+<label for="logPain" data-i="lLogPain"></label><select id="logPain"></select>
+<button class="btn g" id="saveLog" style="margin-top:18px" data-i="save"></button>
+</div>
+<div id="logList"></div>
+</div></section>
+
+<section id="chat"><div class="wrap">
+<h2 data-i="cH"></h2>
+<div class="card">
+<div id="chatBox"><div class="ai" data-i="greet"></div></div>
+<input type="text" id="chatIn"><button class="btn p" id="send" data-i="send"></button>
+</div>
+</div></section>
+
+<footer><div data-i="f1"></div><small data-i="f2"></small></footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LG=['zh','en','ko'];let li=0;
+try{const s=LG.indexOf(localStorage.getItem('rehabLang'));li=s>=0?s:(/^ko/.test(navigator.language)?2:/^zh/.test(navigator.language)?0:1)}catch(e){}
+const L=a=>a[li];
+const S={
+brand:['AI远程康复平台','AI Remote Rehab','AI 원격 재활 플랫폼'],
+nHome:['首页','Home','홈'],nEval:['AI评估','Assessment','AI 평가'],nTrain:['训练库','Exercises','운동 라이브러리'],nRec:['打卡','Check-in','출석 기록'],nChat:['AI顾问','Advisor','AI 상담'],
+h1:['在家也能做规范的康复训练','Do proper rehab exercises at home','집에서도 올바른 재활 운동을'],
+hp:['填写损伤情况，获得分阶段训练建议；每天打卡记录疼痛和感受；有问题随时问顾问。','Enter your injury details to get stage-based exercise advice, log pain and progress daily, and ask the advisor anytime.','부상 정보를 입력하면 단계별 운동 안내를 받고, 매일 통증과 상태를 기록하며, 언제든 상담할 수 있습니다.'],
+start:['开始评估','Start assessment','평가 시작'],view:['看训练动作','View exercises','운동 보기'],
+eH:['AI康复初评估','AI Rehab Assessment','AI 재활 초기 평가'],
+eLead:['仅课程演示，不能替代专业康复治疗师。','Course demo only. It does not replace a licensed therapist.','수업용 데모이며 전문 재활치료사를 대신할 수 없습니다.'],
+lPart:['损伤部位','Injured area','손상 부위'],lStage:['受伤阶段','Recovery stage','회복 단계'],
+lPain:['疼痛评分（0无痛 – 10剧痛）','Pain score (0 none – 10 severe)','통증 점수 (0 없음 – 10 극심)'],lSwell:['肿胀情况','Swelling','부기'],
+gen:['生成康复建议','Get rehab advice','재활 안내 받기'],
+unit:['{n} 分','{n}/10','{n}점'],
+al1:['疼痛较重或肿胀明显：请先停止训练，尽快联系康复师或医生评估。','Severe pain or marked swelling: stop exercising and contact your therapist or doctor soon.','통증이 심하거나 부기가 뚜렷합니다. 운동을 멈추고 재활치료사나 의사에게 빨리 연락하세요.'],
+al2:['疼痛偏高：本次训练减量，并在疼痛降到 4 分以下再增加。','Pain is high: reduce today\'s volume and only increase once pain is 4 or below.','통증이 높은 편입니다. 오늘은 운동량을 줄이고 통증이 4점 이하로 내려가면 다시 늘리세요.'],
+goal:['目标','Goal','목표'],rec:['推荐动作','Recommended exercises','추천 운동'],avoid:['需要避免','Avoid','피해야 할 것'],
+stop:['训练中出现尖锐刺痛、麻木或放射痛，请立即停止。','Stop immediately if you feel sharp pain, numbness, or radiating pain.','운동 중 날카로운 통증, 저림, 퍼지는 통증이 있으면 즉시 중단하세요.'],
+tH:['康复动作训练库','Exercise Library','재활 운동 라이브러리'],tLead:['点开动作查看步骤和注意事项。','Tap an exercise to see steps and precautions.','운동을 눌러 방법과 주의사항을 확인하세요.'],
+rH:['每日康复打卡','Daily Check-in','일일 재활 기록'],rLead:['记录会保存在这台设备的浏览器中。','Entries are saved in this device\'s browser.','기록은 이 기기의 브라우저에 저장됩니다.'],
+lLog:['今天的训练感受','How did training feel today?','오늘 운동은 어땠나요?'],ph:['例如：肩部活动轻松，轻微酸痛','e.g. Shoulder moved easily, mild soreness','예: 어깨가 편하게 움직이고 약간 뻐근함'],
+lLogPain:['训练后疼痛（0–10）','Pain after training (0–10)','운동 후 통증 (0–10)'],save:['保存打卡','Save entry','기록 저장'],
+empty:['还没有打卡记录，写下今天的第一条吧。','No entries yet. Write your first one today.','아직 기록이 없습니다. 오늘 첫 기록을 남겨 보세요.'],
+pn:['疼痛','Pain','통증'],
+cH:['AI康复顾问','AI Rehab Advisor','AI 재활 상담'],greet:['顾问：您好！可以问我肩部训练、疼痛处理、骨折康复等问题。','Advisor: Hello! Ask me about shoulder exercises, pain, fracture recovery, and more.','상담사: 안녕하세요! 어깨 운동, 통증 관리, 골절 재활 등을 물어보세요.'],
+cph:['输入你的康复问题','Type your rehab question','재활 관련 질문을 입력하세요'],send:['发送','Send','보내기'],me:['我','Me','나'],ad:['顾问','Advisor','상담사'],
+f1:['AI远程康复辅助系统 · 课程作业演示项目','AI Remote Rehab Assistant · Course project demo','AI 원격 재활 보조 시스템 · 수업 과제 데모'],
+f2:['免责声明：本系统仅用于教学演示，不能替代执业康复治疗师的诊断。','Disclaimer: for teaching demonstration only; not a substitute for a licensed therapist\'s diagnosis.','면책: 교육용 데모이며 면허 있는 재활치료사의 진단을 대체하지 않습니다.'],
+r1:['骨折康复先保证骨愈合，不要过早负重。先活动相邻关节预防萎缩，并按复查拍片结果调整。','For fracture rehab, bone healing comes first: avoid early weight-bearing, move neighboring joints to prevent stiffness, and adjust after follow-up imaging.','골절 재활은 뼈 유합이 우선입니다. 일찍 체중을 싣지 말고 인접 관절을 움직여 위축을 막으며, 재검 영상 결과에 따라 조정하세요.'],
+r2:['训练后轻微酸胀属正常；若出现尖锐刺痛或夜间痛加重，请暂停训练并联系康复师。急性期可冰敷，慢性酸痛可热敷。','Mild soreness after training is normal. If you get sharp pain or worse night pain, pause and contact your therapist. Ice suits the acute phase; heat can ease chronic soreness.','운동 후 가벼운 뻐근함은 정상입니다. 날카로운 통증이나 밤 통증이 심해지면 중단하고 치료사에게 연락하세요. 급성기에는 냉찜질, 만성 뻐근함에는 온찜질이 도움이 됩니다.'],
+r3:['肩部训练不要耸肩代偿。钟摆运动时身体前倾，手臂自然下垂摆动，不要主动抬臂；出现放射痛立即停止。','In shoulder exercises avoid shrugging. For pendulums, lean forward and let the arm hang and swing without lifting it; stop at once if pain radiates.','어깨 운동에서는 어깨를 으쓱하지 마세요. 진자 운동은 몸을 숙이고 팔을 늘어뜨려 흔들며, 스스로 들지 않습니다. 통증이 퍼지면 즉시 중단하세요.'],
+r4:['膝关节训练注意膝盖对准脚尖，不超过脚尖；肿胀加重时减量并抬高下肢。','In knee exercises keep the knee aligned over the toes and not past them; if swelling increases, reduce volume and elevate the leg.','무릎 운동에서는 무릎을 발끝 방향에 맞추고 발끝을 넘기지 마세요. 부기가 심해지면 운동량을 줄이고 다리를 올리세요.'],
+r5:['请告诉我损伤部位、受伤时间和训练中遇到的问题，我给出居家建议。本建议仅课程演示，不能替代康复师。','Tell me the injured area, when it happened, and any trouble during exercise, and I will suggest home advice. Demo only; not a substitute for a therapist.','손상 부위, 부상 시기, 운동 중 어려움을 알려 주시면 가정 내 조언을 드립니다. 데모이며 치료사를 대신할 수 없습니다.']};
+const ST=[['early',['急性期（1–2周）','Acute (weeks 1–2)','급성기 (1–2주)']],['mid',['亚急性期（3–6周）','Subacute (weeks 3–6)','아급성기 (3–6주)']],['late',['恢复期（6周以上）','Recovery (6+ weeks)','회복기 (6주 이상)']]];
+const SW=[['no',['无肿胀','None','없음']],['light',['轻微肿胀','Mild','가벼움']],['heavy',['明显肿胀','Marked','뚜렷함']]];
+const PT=[['shoulder',['肩部 / 肩袖损伤','Shoulder / rotator cuff','어깨 / 회전근개 손상']],['wrist',['腕关节骨折','Wrist fracture','손목 골절']],['knee',['膝关节术后 / 半月板','Knee surgery / meniscus','무릎 수술 후 / 반월상연골']],['ankle',['踝关节扭伤 / 骨折','Ankle sprain / fracture','발목 염좌 / 골절']],['elbow',['肘关节损伤','Elbow injury','팔꿈치 손상']]];
+const GOAL={early:['控制疼痛与炎症，保护损伤部位','Control pain and inflammation, protect the injury','통증과 염증을 조절하고 손상 부위를 보호'],mid:['逐步恢复活动范围','Gradually restore range of motion','관절 가동범위를 점진적으로 회복'],late:['恢复肌力、稳定性与日常功能','Rebuild strength, stability and daily function','근력·안정성·일상 기능 회복']};
+const M={pend:['钟摆运动','Pendulum swings','진자 운동'],scap:['肩胛骨等长收缩','Scapular squeezes','견갑골 등척성 수축'],wall:['爬墙训练','Wall climbs','벽 타기 운동'],erot:['外旋等长收缩','Isometric external rotation','외회전 등척성 수축'],band:['弹力带外旋','Band external rotation','밴드 외회전'],ytwl:['YTWL训练','YTWL raises','YTWL 운동'],fist:['握拳张开','Fist open-close','주먹 쥐었다 펴기'],elev:['抬高患肢','Elevate the limb','환부 올리기'],fing:['手指对指','Finger touches','손가락 맞대기'],wfl:['轻柔腕屈伸','Gentle wrist flexion/extension','부드러운 손목 굽힘·폄'],grip:['握力球训练','Grip ball squeezes','악력공 운동'],pump:['踝泵','Ankle pumps','발목 펌프'],quad:['股四头肌等长收缩','Quad sets','대퇴사두근 등척성 수축'],slr:['直腿抬高','Straight-leg raises','다리 곧게 들어올리기'],wsit:['浅幅靠墙静蹲','Shallow wall sits','얕은 벽 스쿼트'],lung:['浅弓步','Shallow lunges','얕은 런지'],circ:['踝关节画圈','Ankle circles','발목 돌리기'],dors:['弹力带背屈','Band dorsiflexion','밴드 발등굽힘'],sls:['单腿站立','Single-leg stand','한 발 서기'],calf:['提踵','Calf raises','발뒤꿈치 들기'],sw:['肩腕主动活动','Active shoulder & wrist moves','어깨·손목 능동 운동'],efl:['主动屈伸肘','Active elbow bend/straighten','팔꿈치 능동 굽힘·폄'],fore:['前臂旋转','Forearm rotation','아래팔 돌리기'],lcurl:['轻重量屈伸','Light-weight curls','가벼운 무게 굽힘·폄'],eband:['弹力带训练','Band strengthening','밴드 강화 운동']};
+const A={load:['负重','Carrying weight','무거운 것 들기'],sud:['突然发力','Sudden forceful moves','갑작스러운 힘 쓰기'],shr:['耸肩代偿','Shrugging to compensate','어깨 으쓱 보상'],sharp:['引起尖锐刺痛的动作','Movements causing sharp pain','날카로운 통증을 유발하는 동작'],rm:['自行拆除固定','Removing the splint yourself','임의로 고정 해제'],twist:['用力扭转','Forceful twisting','강하게 비틀기'],squat:['深蹲、扭转膝盖','Deep squats, knee twisting','깊은 스쿼트, 무릎 비틀기'],jump:['跑跳','Running and jumping','달리기·점프'],kin:['膝盖内扣或超过脚尖','Knees caving in or past toes','무릎이 안으로 모이거나 발끝을 넘김'],heat:['急性期热敷','Heat in the acute phase','급성기 온찜질'],unev:['不平整路面','Uneven ground','고르지 않은 바닥'],cut:['急停变向','Sudden stops and turns','급정지·방향 전환'],ovr:['一次加量过多','Adding too much at once','한 번에 과도하게 늘리기'],mass:['按摩伤处','Massaging the injury','다친 부위 마사지'],pull:['暴力牵拉','Forced stretching','무리하게 당기기']};
+const PL={shoulder:{early:['pend scap','load sud'],mid:['pend wall erot','shr sharp'],late:['band ytwl','shr ovr']},wrist:{early:['fist elev','load rm'],mid:['fing wfl','load twist'],late:['wfl grip','sud ovr']},knee:{early:['pump quad','squat twist'],mid:['slr wsit','jump kin'],late:['wsit lung','kin cut']},ankle:{early:['pump elev','load heat'],mid:['circ dors','unev sharp'],late:['sls calf','cut ovr']},elbow:{early:['sw fist','pull load'],mid:['efl fore','pull mass'],late:['lcurl eband','load sud']}};
+const E=[
+[['肩部钟摆运动','Shoulder pendulum','어깨 진자 운동'],['肩部损伤早期','Early shoulder injury','어깨 손상 초기'],['每组10次，每日3组','10 reps × 3 sets daily','10회 × 3세트, 매일'],['健侧手扶桌子，身体前倾|患侧手臂自然下垂|借身体晃动带动手臂小幅画圈|不要主动用力抬手臂','Lean forward, healthy hand on a table|Let the injured arm hang loose|Sway your body to make small circles|Do not lift the arm actively','건강한 손으로 테이블을 짚고 몸을 숙입니다|다친 팔은 힘을 빼고 늘어뜨립니다|몸을 흔들어 팔이 작게 원을 그리게 합니다|팔을 스스로 들어 올리지 않습니다'],['防止耸肩代偿；出现放射痛立即停止。','Avoid shrugging; stop at once if pain radiates.','어깨를 으쓱하지 마세요. 통증이 퍼지면 즉시 중단하세요.']],
+[['踝泵运动','Ankle pumps','발목 펌프 운동'],['下肢术后 / 踝部损伤','Lower-limb surgery / ankle injury','하지 수술 후 / 발목 손상'],['每组20次，每日4组','20 reps × 4 sets daily','20회 × 4세트, 매일'],['平躺或坐位，腿伸直|脚尖尽量向上勾|再尽量向下踩|缓慢、匀速重复','Lie or sit with the leg straight|Pull your toes up toward you|Then point them down|Repeat slowly and steadily','누워서 또는 앉아서 다리를 폅니다|발끝을 몸쪽으로 최대한 당깁니다|이어서 발끝을 아래로 밉니다|천천히 일정하게 반복합니다'],['促进血液循环，预防血栓；肿胀明显时抬高下肢。','Boosts circulation and helps prevent clots; elevate the leg if swollen.','혈액순환을 돕고 혈전을 예방합니다. 부기가 있으면 다리를 올리세요.']],
+[['靠墙静蹲','Wall sit','벽 스쿼트'],['膝关节康复','Knee rehab','무릎 재활'],['每次30秒，每日3组','30 s × 3 sets daily','30초 × 3세트, 매일'],['背靠墙，双脚与肩同宽|缓慢下蹲到舒适角度|膝盖对准脚尖方向|保持后缓慢起身','Back to the wall, feet shoulder-width|Slide down to a comfortable angle|Keep knees over your toes|Hold, then rise slowly','벽에 등을 대고 발을 어깨너비로 벌립니다|편한 각도까지 천천히 내려갑니다|무릎을 발끝 방향에 맞춥니다|유지한 뒤 천천히 일어납니다'],['膝盖不要超过脚尖，膝前疼痛则减小下蹲幅度。','Keep knees behind the toes; if the front of the knee hurts, sit less deep.','무릎이 발끝을 넘지 않게 하세요. 무릎 앞쪽이 아프면 덜 내려가세요.']],
+[['握拳张开','Fist open-close','주먹 쥐었다 펴기'],['腕部 / 肘部早期','Early wrist / elbow','손목·팔꿈치 초기'],['每组15次，每日4组','15 reps × 4 sets daily','15회 × 4세트, 매일'],['抬高患肢|用力握拳停2秒|完全张开手指|重复','Elevate the limb|Make a firm fist, hold 2 s|Open your fingers fully|Repeat','환부를 올립니다|주먹을 꽉 쥐고 2초 유지합니다|손가락을 완전히 펼칩니다|반복합니다'],['有助于消肿；保持固定物不松动。','Helps reduce swelling; keep any splint secure.','부기 감소에 도움이 됩니다. 고정 장구가 느슨해지지 않게 하세요.']],
+[['弹力带外旋','Band external rotation','밴드 외회전'],['肩部恢复期','Late shoulder recovery','어깨 회복기'],['每组12次，每日2组','12 reps × 2 sets daily','12회 × 2세트, 매일'],['肘夹紧身体，屈肘90度|手握弹力带向外转|停1秒缓慢还原|保持肩部放松','Elbow at your side, bent 90°|Pull the band outward|Pause 1 s, return slowly|Keep the shoulder relaxed','팔꿈치를 옆구리에 붙여 90도로 굽힙니다|밴드를 잡고 바깥으로 돌립니다|1초 멈춘 뒤 천천히 돌아옵니다|어깨 힘을 뺍니다'],['选择较轻阻力，动作质量比次数更重要。','Use light resistance; quality matters more than reps.','가벼운 저항을 쓰세요. 횟수보다 동작의 질이 중요합니다.']],
+[['单腿站立','Single-leg stand','한 발 서기'],['踝 / 膝恢复期','Late ankle / knee recovery','발목·무릎 회복기'],['每次30秒，每侧3次','30 s × 3 per side','30초 × 3회, 양쪽'],['扶稳台面站好|抬起一只脚|保持身体直立|稳定后逐步减少扶持','Stand holding a stable surface|Lift one foot|Keep your body upright|Reduce support as you steady','안정적인 면을 잡고 섭니다|한 발을 듭니다|몸을 곧게 유지합니다|안정되면 점차 잡는 힘을 줄입니다'],['在安全环境练习，旁边放稳固支撑物。','Practice somewhere safe with a sturdy support nearby.','안전한 곳에서 하고 옆에 튼튼한 지지물을 두세요.']]];
+
+function fill(id,arr){const el=$(id),v=el.value;el.innerHTML=arr.map(([k,n])=>'<option value="'+k+'">'+esc(L(n))+'</option>').join('');if(v)el.value=v}
+const unit=n=>L(S.unit).replace('{n}',n);
+let planOn=false;
+function gen(scroll){
+  const part=$('part').value,st=$('stage').value,pain=+$('pain').value,sw=$('swell').value;
+  const [m,a]=PL[part][st].map(x=>x.split(' '));
+  let h='';
+  if(pain>=7||sw==='heavy')h+='<div class="alert">'+esc(L(S.al1))+'</div>';
+  else if(pain>=5)h+='<div class="alert">'+esc(L(S.al2))+'</div>';
+  h+='<p><b>'+L(S.goal)+':</b> '+esc(L(GOAL[st]))+'</p><b>'+L(S.rec)+'</b><ul>'+m.map(k=>'<li>'+esc(L(M[k]))+'</li>').join('')+'</ul><b>'+L(S.avoid)+'</b><ul>'+a.map(k=>'<li>'+esc(L(A[k]))+'</li>').join('')+'</ul><p>'+esc(L(S.stop))+'</p>';
+  $('planTitle').textContent=L(PT.find(p=>p[0]===part)[1])+' · '+L(ST.find(s=>s[0]===st)[1]);
+  $('planBody').innerHTML=h;$('plan').style.display='block';planOn=true;
+  if(scroll)$('plan').scrollIntoView({behavior:'smooth',block:'start'});
+}
+let logs=[];try{logs=JSON.parse(localStorage.getItem('rehabLogs')||'[]')}catch(e){logs=[]}
+function renderLogs(){
+  const loc=['zh-CN','en-US','ko-KR'][li];
+  $('logList').innerHTML=logs.length?logs.slice().reverse().map(l=>'<div class="log"><b>'+esc(typeof l.d==='number'?new Date(l.d).toLocaleString(loc):l.d)+'</b>　'+esc(L(S.pn))+' '+esc(unit(l.p))+'<br>'+esc(l.t)+'</div>').join(''):'<p class="empty">'+esc(L(S.empty))+'</p>';
+}
+function reply(m){
+  if(/骨折|fractur|broken|골절/i.test(m))return L(S.r1);
+  if(/疼|痛|pain|hurt|ache|통증|아프/i.test(m))return L(S.r2);
+  if(/肩|shoulder|어깨/i.test(m))return L(S.r3);
+  if(/膝|knee|무릎/i.test(m))return L(S.r4);
+  return L(S.r5);
+}
+function render(){
+  document.documentElement.lang=LG[li];
+  document.querySelectorAll('[data-i]').forEach(e=>e.textContent=L(S[e.dataset.i]));
+  document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===LG[li]));
+  document.title=L(S.brand);
+  fill('part',PT);fill('stage',ST);fill('swell',SW);
+  const lp=$('logPain'),v=lp.value||'0';lp.innerHTML=[...Array(11).keys()].map(i=>'<option value="'+i+'">'+esc(unit(i))+'</option>').join('');lp.value=v;
+  $('painText').textContent=unit($('pain').value);
+  $('logText').placeholder=L(S.ph);$('chatIn').placeholder=L(S.cph);
+  $('exList').innerHTML=E.map(e=>'<details class="card ex"><summary><span>'+esc(L(e[0]))+'<small>'+esc(L(e[1]))+'</small></span></summary><div class="b"><p class="dose">'+esc(L(e[2]))+'</p><ol>'+L(e[3]).split('|').map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol><p>'+esc(L(e[4]))+'</p></div></details>').join('');
+  renderLogs();if(planOn)gen(false);
+}
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>{li=LG.indexOf(b.dataset.l);try{localStorage.setItem('rehabLang',b.dataset.l)}catch(e){}render()}));
+$('pain').addEventListener('input',()=>$('painText').textContent=unit($('pain').value));
+$('gen').addEventListener('click',()=>gen(true));
+$('saveLog').addEventListener('click',()=>{const t=$('logText').value.trim();if(!t)return;logs.push({d:Date.now(),p:$('logPain').value,t});try{localStorage.setItem('rehabLogs',JSON.stringify(logs))}catch(e){}$('logText').value='';renderLogs()});
+function send(){
+  const m=$('chatIn').value.trim();if(!m)return;const b=$('chatBox');
+  b.insertAdjacentHTML('beforeend','<div class="me">'+esc(L(S.me))+': '+esc(m)+'</div>');$('chatIn').value='';
+  setTimeout(()=>{b.insertAdjacentHTML('beforeend','<div class="ai">'+esc(L(S.ad))+': '+esc(reply(m))+'</div>');b.scrollTop=b.scrollHeight},500);
+}
+$('send').addEventListener('click',send);
+$('chatIn').addEventListener('keydown',e=>{if(e.key==='Enter')send()});
+render();
+</script>
+</body>
+</html>

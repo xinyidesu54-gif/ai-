@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI远程康复辅助系统｜平板版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        health: '#10b981',
+                        warn: '#f59e0b'
+                    },
+                    fontFamily: {
+                        sans: ['system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+            .btn-touch {
+                @apply py-4 text-xl rounded-xl;
+            }
+            .input-touch {
+                @apply p-4 text-xl rounded-xl;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+<!--顶部导航-->
+<nav class="bg-white card-shadow sticky top-0 z-10">
+    <div class="px-4 py-4 flex items-center gap-3">
+        <i class="fa fa-heartbeat text-primary text-3xl"></i>
+        <h1 class="text-2xl font-bold text-primary">AI远程康复平台</h1>
+    </div>
+    <div class="flex overflow-x-auto gap-4 px-4 pb-3 text-xl">
+        <a href="#home" class="shrink-0 px-2 py-2 whitespace-nowrap">🏠首页</a>
+        <a href="#eval" class="shrink-0 px-2 py-2 whitespace-nowrap">📋AI评估</a>
+        <a href="#train" class="shrink-0 px-2 py-2 whitespace-nowrap">🏃训练库</a>
+        <a href="#record" class="shrink-0 px-2 py-2 whitespace-nowrap">📅打卡</a>
+        <a href="#chat" class="shrink-0 px-2 py-2 whitespace-nowrap">💬AI顾问</a>
+    </div>
+</nav>
+
+<!--首页-->
+<section id="home" class="bg-gradient-to-r from-blue-600 to-blue-400 text-white py-14 px-4">
+    <h2 class="text-3xl font-bold mb-4">AI远程康复治疗</h2>
+    <p class="text-xl mb-6">居家康复评估、动作指导、训练打卡，平板直接操作，适合远程康复课程演示</p>
+    <div class="flex flex-wrap gap-4">
+        <a href="#eval" class="bg-white text-primary px-6 btn-touch font-bold">开始AI评估</a>
+        <a href="#train" class="border-2 border-white px-6 btn-touch font-bold">康复动作库</a>
+    </div>
+</section>
+
+<!--功能卡片-->
+<section class="py-10 px-4">
+    <div class="grid grid-cols-2 gap-5">
+        <div class="bg-white p-6 rounded-xl card-shadow">
+            <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-primary text-2xl mb-4">
+                <i class="fa fa-user-md"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">AI康复评估</h3>
+            <p class="text-slate-600 text-base">选择损伤，AI生成分阶段康复方案</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl card-shadow">
+            <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-health text-2xl mb-4">
+                <i class="fa fa-video-camera"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">姿态识别</h3>
+            <p class="text-slate-600 text-base">摄像头识别动作，纠正代偿姿势</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl card-shadow col-span-2">
+            <div class="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center text-warn text-2xl mb-4">
+                <i class="fa fa-calendar-check-o"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">康复进度追踪</h3>
+            <p class="text-slate-600 text-base">每日打卡，记录疼痛与训练感受，保存康复记录</p>
+        </div>
+    </div>
+</section>
+
+<!--AI评估模块-->
+<section id="eval" class="py-10 bg-white px-4">
+    <h2 class="text-2xl font-bold mb-2">📋 AI康复初评估</h2>
+    <p class="text-slate-600 mb-8 text-lg">填写信息，AI生成居家康复建议（仅课程演示，不可替代专业康复师）</p>
+    <div class="grid grid-cols-1 gap-6">
+        <div>
+            <label class="block mb-3 font-bold text-lg">损伤部位</label>
+            <select id="injurePart" class="w-full border border-slate-300 input-touch">
+                <option value="shoulder">肩部复合体 / 肩袖损伤</option>
+                <option value="wrist">腕关节骨折</option>
+                <option value="knee">膝关节术后/半月板</option>
+                <option value="ankle">踝关节扭伤骨折</option>
+                <option value="elbow">肘关节损伤</option>
+            </select>
+        </div>
+        <div>
+            <label class="block mb-3 font-bold text-lg">受伤阶段</label>
+            <select id="injureTime" class="w-full border border-slate-300 input-touch">
+                <option value="early">急性期（1-2周）</option>
+                <option value="mid">亚急性期（3~6周）</option>
+                <option value="late">恢复期（6周以上）</option>
+            </select>
+        </div>
+        <div>
+            <label class="block mb-3 font-bold text-lg">疼痛VAS评分（0无痛~10剧痛）</label>
+            <input type="range" id="painScore" min="0" max="10" value="3" class="w-full h-4">
+            <span id="painText" class="text-xl">当前：3分</span>
+        </div>
+        <div>
+            <label class="block mb-3 font-bold text-lg">肿胀情况</label>
+            <select id="swell" class="w-full border border-slate-300 input-touch">
+                <option value="no">无肿胀</option>
+                <option value="light">轻微肿胀</option>
+                <option value="heavy">明显肿胀</option>
+            </select>
+        </div>
+    </div>
+    <button onclick="generatePlan()" class="mt-8 w-full bg-primary text-white btn-touch">AI生成康复方案</button>
+    <div id="planResult" class="mt-8 p-5 bg-slate-50 rounded-xl hidden">
+        <h3 class="font-bold text-xl mb-3">AI康复方案</h3>
+        <div id="planText" class="text-lg"></div>
+    </div>
+</section>
+
+<!--康复动作库-->
+<section id="train" class="py-10 px-4">
+    <h2 class="text-2xl font-bold mb-6">🏃 康复动作训练库</h2>
+    <div class="grid grid-cols-1 gap-5">
+        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+            <div class="bg-blue-50 h-40 flex items-center justify-center text-6xl text-primary"><i class="fa fa-hand-rock-o"></i></div>
+            <div class="p-5">
+                <h3 class="text-xl font-bold">肩部钟摆运动</h3>
+                <p class="text-slate-600 my-3 text-lg">适合肩部损伤早期，放松肩周，防止粘连</p>
+                <p class="text-emerald-600 text-lg font-medium">每组10次，每日3组</p>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+            <div class="bg-emerald-50 h-40 flex items-center justify-center text-6xl text-health"><i class="fa fa-balance-scale"></i></div>
+            <div class="p-5">
+                <h3 class="text-xl font-bold">踝泵运动</h3>
+                <p class="text-slate-600 my-3 text-lg">下肢骨折术后，促进血液循环预防血栓</p>
+                <p class="text-emerald-600 text-lg font-medium">每组20次，每日4组</p>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+            <div class="bg-amber-50 h-40 flex items-center justify-center text-6xl text-warn"><i class="fa fa-street-view"></i></div>
+            <div class="p-5">
+                <h3 class="text-xl font-bold">靠墙静蹲</h3>
+                <p class="text-slate-600 my-3 text-lg">膝关节康复，强化股四头肌</p>
+                <p class="text-emerald-600 text-lg font-medium">每次30秒，每日3组</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--打卡记录-->
+<section id="record" class="py-10 bg-white px-4">
+    <h2 class="text-2xl font-bold mb-6">📅 每日康复打卡</h2>
+    <div class="flex flex-col gap-4 mb-4">
+        <input id="trainLog" type="text" placeholder="记录今天训练感受，如：肩部活动轻松，轻微酸痛" class="w-full border input-touch">
+        <button onclick="addLog()" class="bg-health text-white btn-touch">保存打卡</button>
+    </div>
+    <div id="logList" class="space-y-3"></div>
+</section>
+
+<!--AI聊天顾问-->
+<section id="chat" class="py-10 px-4">
+    <h2 class="text-2xl font-bold mb-6">💬 AI康复顾问</h2>
+    <div class="bg-white rounded-xl card-shadow p-5">
+        <div id="chatBox" class="h-72 overflow-y-auto border p-4 mb-4 rounded-xl bg-slate-50 text-lg">
+            <div class="text-slate-600">AI康复师：您好！请问有什么康复相关的问题？（例如：肩部训练注意事项、疼痛处理）</div>
+        </div>
+        <div class="flex flex-col gap-4">
+            <input id="chatInput" type="text" placeholder="输入你的康复问题" class="w-full border input-touch">
+            <button onclick="sendChat()" class="bg-primary text-white btn-touch">发送</button>
+        </div>
+    </div>
+</section>
+
+<!--页脚-->
+<footer class="bg-slate-800 text-white py-8 mt-10 px-4 text-center">
+    <p class="text-xl">AI远程康复辅助系统 | 课程作业演示项目</p>
+    <p class="text-slate-400 text-base mt-3">免责声明：本系统仅用于教学演示，不能替代执业康复治疗师的专业诊断</p>
+</footer>
+
+<script>
+    //疼痛滑块
+    const painSlider = document.getElementById('painScore');
+    painSlider.addEventListener('input', ()=>{
+        document.getElementById('painText').innerText = `当前：${painSlider.value}分`
+    })
+
+    //AI生成康复方案
+    function generatePlan(){
+        const part = document.getElementById('injurePart').value;
+        const time = document.getElementById('injureTime').value;
+        const pain = painSlider.value;
+        const swell = document.getElementById('swell').value;
+        let resultText = "";
+        if(part === "shoulder"){
+            if(time === "early"){
+                resultText = `<p class="mb-3"><strong>诊断参考：肩部复合体损伤 急性期方案</strong></p>
+                <p>✅ 优先控制炎症，禁止大幅度抬肩。</p>
+                <p>✅ 推荐动作：钟摆运动、肩胛骨等长收缩。</p>
+                <p>❌ 禁止负重、高举手臂，避免肩袖二次拉伤。</p>
+                <p>💡 疼痛超过5分立刻停止训练，冰敷10分钟。</p>`
+            }else if(time === "mid"){
+                resultText = `<p class="mb-3"><strong>诊断参考：肩部复合体损伤 亚急性期方案</strong></p>
+                <p>✅ 逐步增加肩关节被动活动范围。</p>
+                <p>✅ 动作：钟摆、爬墙训练、外旋等长收缩。</p>
+                <p>💡 训练以酸胀为限，不能产生尖锐刺痛。</p>`
+            }else{
+                resultText = `<p class="mb-3"><strong>诊断参考：肩部复合体损伤 恢复期方案</strong></p>
+                <p>✅ 强化肩袖、斜方肌中下束，恢复肩部力量与活动度。</p>
+                <p>✅ 动作：弹力带外旋、YTWL训练。</p>
+                <p>💡 改善体态，预防圆肩代偿。</p>`
+            }
+        }else if(part === "wrist"){
+            resultText = `<p><strong>腕骨骨折康复方案</strong></p><p>急性期以手指活动消肿为主；恢复期循序渐进做腕屈伸，避免过早负重。</p>`
+        }else if(part === "knee"){
+            resultText = `<p><strong>膝关节康复方案</strong></p><p>早期踝泵、股四头肌等长收缩；后期靠墙静蹲，训练时膝盖不超过脚尖。</p>`
+        }else{
+            resultText = `<p>已生成基础康复方案，请遵从康复师指导。训练中出现剧痛立刻停止。</p>`
+        }
+        document.getElementById('planText').innerHTML = resultText;
+        document.getElementById('planResult').classList.remove('hidden');
+    }
+
+    //打卡记录
+    let logs = [];
+    function addLog(){
+        const content = document.getElementById('trainLog').value;
+        if(!content) return;
+        const date = new Date().toLocaleString();
+        logs.push(`【${date}】${content}`);
+        renderLog();
+        document.getElementById('trainLog').value = "";
+    }
+    function renderLog(){
+        const box = document.getElementById('logList');
+        box.innerHTML = logs.map(item=>`<div class="p-4 bg-slate-100 rounded-xl text-lg">${item}</div>`).join("");
+    }
+
+    //AI聊天
+    function sendChat(){
+        const msg = document.getElementById('chatInput').value;
+        if(!msg) return;
+        const chatBox = document.getElementById('chatBox');
+        chatBox.innerHTML += `<div class="text-blue-700 my-2">用户：${msg}</div>`;
+        document.getElementById('chatInput').value = "";
+        setTimeout(()=>{
+            let reply = "";
+            if(msg.includes("肩") || msg.includes("肩部")){
+                reply = "AI康复师：肩部训练切记不要耸肩代偿！钟摆运动身体要弯腰，手臂自然下垂摆动，不要主动发力抬胳膊。训练如果出现放射痛，马上停止。";
+            }else if(msg.includes("疼痛") || msg.includes("痛")){
+                reply = "AI康复师：训练后轻微酸胀属于正常；如果出现尖锐刺痛、夜间自发疼痛加重，建议暂停训练并联系康复师。急性期可冰敷，慢性酸痛可热敷。";
+            }else if(msg.includes("骨折")){
+                reply = "AI康复师：骨折康复优先保证骨愈合，不要过早负重。先做相邻关节活动，预防肌肉萎缩，严格遵从复查拍片结果。";
+            }else{
+                reply = "AI康复师：你可以描述你的损伤部位、受伤时间和训练遇到的问题，我帮你给出居家康复建议，注意本建议仅课程演示，不能替代线下康复师。";
+            }
+            chatBox.innerHTML += `<div class="text-emerald-700 my-2">AI康复师：${reply}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        },600)
+    }
+</script>
+</body>
+</html>
